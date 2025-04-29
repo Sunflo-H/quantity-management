@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import * as XLSX from "xlsx";
-export default function ExcelReader() {
+import "../App.css";
+
+const ExcelReader = () => {
   const [data, setData] = useState([]);
+  const [blinkedRow, setBlinkedRow] = useState(null);
 
   const handleFileUpload = (e) => {
     const file = e.target.files[0];
@@ -10,8 +13,7 @@ export default function ExcelReader() {
     reader.onload = (evt) => {
       const binaryStr = evt.target.result;
       const workbook = XLSX.read(binaryStr, { type: "binary" });
-      console.log(workbook);
-      const sheetName = workbook.SheetNames[0]; // 시트 : 엑셀 하단에 있는 거 (이걸로 1월 2월 3월 이렇게 나눌수 있잖아!)
+      const sheetName = workbook.SheetNames[0];
       const sheet = workbook.Sheets[sheetName];
       const jsonData = XLSX.utils.sheet_to_json(sheet);
       setData(jsonData);
@@ -20,24 +22,66 @@ export default function ExcelReader() {
     reader.readAsBinaryString(file);
   };
 
+  const handleRowClick = (index) => {
+    setBlinkedRow(index);
+    setTimeout(() => setBlinkedRow(null), 600); // 0.6초 뒤 초기화
+  };
+
+  const columnOrder = [
+    "상품코드",
+    "상품명",
+    "칼라",
+    "수량",
+    "00",
+    "01",
+    "02",
+    "03",
+    "04",
+    "05",
+    "06",
+    "07",
+    "08",
+    "09",
+    "10",
+    "11",
+    "12",
+    "13",
+    "14",
+    "15",
+    "16",
+    "17",
+    "18",
+    "19",
+  ];
+
   return (
-    <div className="p-4">
-      <h2 className="text-xl font-bold mb-2">엑셀 파일 업로드</h2>
+    <div>
       <input type="file" accept=".xlsx, .xls" onChange={handleFileUpload} />
-      <div className="mt-4">
-        <h3 className="font-semibold">읽은 데이터:</h3>
-        {data.length === 0 ? (
-          <p>데이터가 없습니다.</p>
-        ) : (
-          <ul className="list-disc pl-4">
-            {data.map((row, index) => (
-              <li key={index}>
-                이름: {row.이름}, 나이: {row.나이}
-              </li>
+      <table border="1">
+        <thead>
+          <tr>
+            {columnOrder.map((key) => (
+              <th key={key}>{key}</th>
             ))}
-          </ul>
-        )}
-      </div>
+          </tr>
+        </thead>
+        <tbody>
+          {data.map((row, i) => (
+            <tr
+              key={i}
+              onClick={() => handleRowClick(i)}
+              className={blinkedRow === i ? "blink-row" : ""}
+              style={{ cursor: "pointer" }}
+            >
+              {columnOrder.map((key) => (
+                <td key={key}>{row[key] ?? ""}</td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
-}
+};
+
+export default ExcelReader;
