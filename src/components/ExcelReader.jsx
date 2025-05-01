@@ -24,7 +24,7 @@ const ExcelReader = () => {
 
   const handleRowClick = (index) => {
     setBlinkedRow(index);
-    setTimeout(() => setBlinkedRow(null), 600); // 0.6초 뒤 초기화
+    setTimeout(() => setBlinkedRow(null), 60000); // 0.6초 뒤 초기화
   };
 
   const columnOrder = [
