@@ -2,7 +2,7 @@ import "./App.css";
 import ExcelReader from "./components/ExcelReader";
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-import { getDatabase, ref, set } from "firebase/database";
+import { child, get, getDatabase, ref, set } from "firebase/database";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBbkCm8B70Qi2aPMuL-YKZEZc7_ieAqwH0",
@@ -16,11 +16,9 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const database = getDatabase();
+const db = getDatabase();
 
-console.log(database);
 function writeUserData(userId, name, email, imageUrl) {
-  const db = getDatabase();
   set(ref(db, "users/" + userId), {
     username: name,
     email: email,
@@ -28,13 +26,29 @@ function writeUserData(userId, name, email, imageUrl) {
   });
 }
 
+const dbRef = ref(db);
+function readData() {
+  get(child(dbRef, `users/1`))
+    .then((snapshot) => {
+      if (snapshot.exists()) {
+        console.log(snapshot.val());
+      } else {
+        console.log("No data available");
+      }
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+}
+
 function App() {
   return (
     <div className="App">
       <ExcelReader />
       <div onClick={() => writeUserData(1, "홍길동", "gd@google.com", "")}>
-        클릭{" "}
+        쓰기
       </div>
+      <div onClick={readData}>읽기</div>
     </div>
   );
 }
