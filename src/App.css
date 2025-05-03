@@ -1,3 +1,5 @@
+@import "tailwindcss";
+
 @keyframes blink {
   0% {
     background-color: #ffffcc;
