@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-@keyframes blink {
+/* @keyframes blink {
   0% {
     background-color: #ffffcc;
   }
@@ -18,4 +18,4 @@
 
 .click {
   background-color: #ffe58a;
-}
+} */

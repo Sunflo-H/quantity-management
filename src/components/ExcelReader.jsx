@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import * as XLSX from "xlsx";
-import "../App.css";
+import "../main.css";
 import { child, get, getDatabase, ref, set } from "firebase/database";
 import { initializeApp } from "firebase/app";
 
@@ -131,7 +131,7 @@ const ExcelReader = () => {
 
   return (
     <div>
-      {/* <h1 class="text-3xl font-bold underline">Hello world!</h1> */}
+      <h1 class="text-3xl font-bold underline">Hello world!</h1>
       <input type="file" accept=".xlsx, .xls" onChange={handleFileUpload} />
       <table border="1">
         <thead>
